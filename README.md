@@ -2,7 +2,7 @@
 
 ## Description
 
--   This project is a PWA Budget tracker.
+-   This project is a PWA Budget tracker, that is being host to Heroku app throught MongoDB - Atlas.
 
 ## Link to the app
 
