@@ -1,4 +1,5 @@
 const CACHE_NAME = "budget-tracker-cache-v1"
+const APP_PREFIX = "budget-tracker-cache-"
 const DATA_CACHE_NAME = "data-cache-v1"
 const FILES_TO_CACHE = [
     "/",
@@ -17,24 +18,6 @@ const FILES_TO_CACHE = [
     "./js/idb.js",
 ]
 
-// Respond with cached resources
-self.addEventListener("fetch", function (evt) {
-    console.log("fetch request : " + evt.request.url)
-    evt.respondWith(
-        caches.match(evt.request).then(function (request) {
-            if (request) {
-                // if cache is available, respond with cache
-                console.log("responding with cache : " + evt.request.url)
-                return request
-            } else {
-                // if there are no cache, try fetching request
-                console.log("file is not cached, fetching : " + evt.request.url)
-                return fetch(evt.request)
-            }
-        })
-    )
-})
-
 // Cache resources
 self.addEventListener("install", function (evt) {
     evt.waitUntil(
@@ -43,6 +26,8 @@ self.addEventListener("install", function (evt) {
             return cache.addAll(FILES_TO_CACHE)
         })
     )
+
+    self.skipWaiting()
 })
 
 // Delete outdated caches
@@ -63,6 +48,25 @@ self.addEventListener("activate", function (evt) {
                     }
                 })
             )
+        })
+    )
+    self.clients.claim()
+})
+
+// Respond with cached resources
+self.addEventListener("fetch", function (evt) {
+    console.log("fetch request : " + evt.request.url)
+    evt.respondWith(
+        caches.match(evt.request).then(function (request) {
+            if (request) {
+                // if cache is available, respond with cache
+                console.log("responding with cache : " + evt.request.url)
+                return request
+            } else {
+                // if there are no cache, try fetching request
+                console.log("file is not cached, fetching : " + evt.request.url)
+                return fetch(evt.request)
+            }
         })
     )
 })

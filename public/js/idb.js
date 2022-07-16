@@ -4,6 +4,8 @@ let db
 // establish a connection to IndexedDB database called 'budget_tracker' and set it to version 1
 const request = indexedDB.open("budget_tracker", 1)
 
+console.log("idb")
+
 request.onupgradeneeded = function (event) {
     const db = event.target.result
     db.createObjectStore("budget", { autoIncrement: true })
@@ -28,9 +30,11 @@ function saveRecord(record) {
 }
 
 function uploadTransaction() {
+    console.log("online")
     const transaction = db.transaction(["budget"], "readwrite")
     const store = transaction.objectStore("budget")
     const getAll = store.getAll()
+    console.log(getAll)
 
     getAll.onsuccess = function () {
         if (getAll.result.length > 0) {
